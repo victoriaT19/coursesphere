@@ -2,6 +2,7 @@ class LessonsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_course, only: [ :index, :create ]
   before_action :set_lesson, only: [ :show, :update, :destroy ]
+  before_action :authorize_ownership!, only: [:update, :destroy]
 
   def index
     render json: @course.lessons
@@ -49,5 +50,11 @@ class LessonsController < ApplicationController
 
   def lesson_params
     params.require(:lesson).permit(:title, :status, :video_url)
+  end
+
+  def authorize_ownership!
+    unless current_user == @lesson.course.creator
+        render json: { error: "Não autorizado" }, status: :forbidden
+    end
   end
 end
