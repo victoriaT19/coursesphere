@@ -9,7 +9,7 @@ class LessonsController < ApplicationController
   end
 
   def show
-    render json: @lesson
+    render json: @lesson.as_json(include: { course: { only: [:creator_id] } })
   end
 
   def create
