@@ -51,3 +51,7 @@ class LessonsController < ApplicationController
     params.require(:lesson).permit(:title, :status, :video_url)
   end
 end
+
+
+
+###me ajuda q
