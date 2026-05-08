@@ -1,6 +1,6 @@
 class LessonsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_course
+  before_action :set_course, only: [ :index, :create ]
   before_action :set_lesson, only: [ :show, :update, :destroy ]
 
   def index
@@ -42,7 +42,7 @@ class LessonsController < ApplicationController
   end
 
   def set_lesson
-    @lesson = @course.lessons.find(params[:id])
+    @lesson = Lesson.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Aula não encontrada" }, status: :not_found
   end
