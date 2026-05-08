@@ -35,30 +35,43 @@ export default function Login(){
         }
     };
 
-    return(
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type = "email"
-                    placeholder = "Email"
-                    value = {email}
-                    onChange = {(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Senha"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                {error && <p style={{color: "red"}}>{error}</p>}
-                <button type="submit" disabled = {loading}>
-                    {loading ? "Entrando..." : "Entrar"}
-                </button>
-            </form>
-            <p>Não tem conta? <Link to = "/register">Registre-se</Link></p>
+    return (
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+            <div className="w-full max-w-md bg-gray-900 rounded-2xl shadow-xl p-8">
+                <h1 className="text-3xl font-bold text-white text-center mb-8">CourseSphere</h1>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-indigo-500"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-indigo-500"
+                    />
+                    {error && <p className="text-red-400 text-sm">{error}</p>}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+                    >
+                        {loading ? "Entrando..." : "Entrar"}
+                    </button>
+                </form>
+                <p className="text-gray-400 text-center mt-6 text-sm">
+                    Não tem conta?{" "}
+                    <Link to="/register" className="text-indigo-400 hover:underline">
+                        Registre-se
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }
