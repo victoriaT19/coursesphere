@@ -39,9 +39,10 @@ export default function CourseDetail(){
     if(!course) return <p>Curso não encontrado.</p>
 
     const isCreator = user?.id === course.creator_id;
-    const filteredLessons = lessons.filter((l) =>
-        statusFilter === "all" || l.status === statusFilter
-    );
+    const filteredLessons = lessons.filter((l) => {
+        if (!isCreator && l.status === "draft") return false;
+        return statusFilter === "all" || l.status === statusFilter;
+    });
 
     return (
         <div className="min-h-screen bg-gray-950 text-white">
@@ -125,7 +126,9 @@ export default function CourseDetail(){
                                     className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex justify-between items-center"
                                 >
                                     <div>
-                                        <h4 className="font-medium text-white">{lesson.title}</h4>
+                                        <Link to={`/lessons/${lesson.id}`} className="font-medium text-white hover:text-indigo-400">
+                                            {lesson.title}
+                                        </Link>
                                         <span className={`text-xs font-semibold px-2 py-1 rounded-full mt-1 inline-block ${
                                             lesson.status === "published"
                                                 ? "bg-green-900 text-green-300"

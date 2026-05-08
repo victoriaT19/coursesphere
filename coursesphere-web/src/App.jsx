@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import CourseDetail from "./pages/CourseDetail";
 import CourseForm from "./pages/CourseForm";
 import LessonForm from "./pages/LessonForm";
+import LessonDetail from "./pages/LessonDetail";
 
 function PrivateRoute({children}){
   const {user} = useAuth();
@@ -23,6 +24,7 @@ export default function App(){
       <Route path="/courses/:id/edit" element={<PrivateRoute><CourseForm/></PrivateRoute>}/>
       <Route path="/courses/:courseId/lessons/new" element = {<PrivateRoute><LessonForm/></PrivateRoute>}/>
       <Route path="/lessons/:lessonId/edit" element = {<PrivateRoute><LessonForm/></PrivateRoute>}/>
+      <Route path="/lessons/:lessonId" element={<PrivateRoute><LessonDetail /></PrivateRoute>} />
       <Route path="*" element = {<Navigate to="/login"/>}/>
     </Routes>
   );
