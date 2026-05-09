@@ -6,7 +6,10 @@ const api = {
     get: (path) =>
         fetch(`${API_URL}${path}`, 
             {headers: {Authorization: `Bearer ${getToken()}`}, 
-        }).then((r) => r.json()),
+        }).then((r) => {
+            if(!r.ok) return r.json().then((e) => Promise.reject(e));
+            return r.json();
+        }),
 
     post: (path, body) =>
         fetch(`${API_URL}${path}`,
