@@ -20,12 +20,13 @@ class CoursesController < ApplicationController
     end
 
     def show
+        enrolled = current_user.enrollments.exists?(course_id: @course.id)
         render json: @course.as_json(
             include:{
                 lessons: {},
                 creator: {only: [:id, :name]}
             }
-        )
+        ).merge(enrolled: enrolled, enrolled_count: @course.enrollments.count)
     end
 
     def create

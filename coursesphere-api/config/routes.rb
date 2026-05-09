@@ -8,8 +8,14 @@ Rails.application.routes.draw do
   post "/auth/register", to: "auth#register"
   post "/auth/login", to: "auth#login"
 
+  get "/profile", to: "profile#show"
+
   resources :courses do
     resources :lessons, shallow: true
+    member do
+      post :enroll, to: "enrollments#create"
+      delete :unenroll, to: "enrollments#destroy"
+    end
   end
 
   # Defines the root path route ("/")
