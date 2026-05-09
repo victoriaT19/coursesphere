@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function CourseDetail(){
     const [course, setCourses] = useState(null)
@@ -11,6 +13,8 @@ export default function CourseDetail(){
     const {id} = useParams();
     const {user} = useAuth();
     const navigate = useNavigate();
+
+    const [modal, setModal] = useState({open:false, message: "", onConfirm: null});
 
     const [statusFilter, setStatusFilter] = useState("all");
 
@@ -23,16 +27,30 @@ export default function CourseDetail(){
         fetch("https://randomuser.me/api/").then((r) => r.json()).then((data) => setGuest(data.results[0]));
     }, [id]);
 
-    const handleDeleteCourse = async () => {
-        if(!confirm("Excluir curso?")) return;
-        await api.delete(`/courses/${id}`);
-        navigate("/dashboard");
+    const handleDeleteCourse = () => {
+      setModal({
+        open: true,
+        message: "Tem certeza que deseja excluir este curso?",
+        onConfirm: async () => {
+          setModal({open:false});
+          await api.delete(`/courses/${id}`);
+          toast.success("Curso excluído com sucesso!");
+          navigate("/dashboard");
+        }
+      });
     };
 
-    const handleDeleteLesson = async (lessonId) => {
-        if(!confirm("Excluir aula?")) return;
-        await api.delete(`/lessons/${lessonId}`);
-        setLessons(lessons.filter((l) => l.id !== lessonId));
+    const handleDeleteLesson = (lessonId) => {
+        setModal({
+          open: true,
+          message: "Tem certeza que deseja excluir esta aula?",
+          onConfirm: async () => {
+            setModal({open:false});
+            await api.delete(`/lessons/${lessonId}`);
+            toast.success("Aula excluída com sucesso!");
+            setLessons(lessons.filter((l) => l.id !== lessonId));
+          }
+        });
     };
 
     if (loading) return <p>Carregando...</p>;
@@ -60,6 +78,7 @@ export default function CourseDetail(){
                                 <p className="text-gray-400 mb-3">{course.description}</p>
                             )}
                             <p className="text-sm text-gray-500">{course.start_date} → {course.end_date}</p>
+                            <p className="text-xs text-gray-600 mt-1">Criado por {course.creator?.name}</p>
                         </div>
                         {isCreator && (
                             <div className="flex gap-2">
@@ -159,6 +178,13 @@ export default function CourseDetail(){
                     )}
                 </div>
             </main>
+            {modal.open && (
+              <ConfirmModal
+                message={modal.message}
+                onConfirm={modal.onConfirm}
+                onCancel={() => setModal({open:false})}
+              />
+            )}
         </div>
     );
 }
