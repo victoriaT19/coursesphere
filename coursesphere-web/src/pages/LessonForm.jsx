@@ -13,15 +13,30 @@ export default function LessonForm() {
     const navigate = useNavigate();
     const isEditing = Boolean(lessonId);
 
+    const [loadingLesson, setLoadingLesson] = useState(true);
+
     useEffect(() => {
         if (isEditing) {
         api.get(`/lessons/${lessonId}`).then((data) => {
+            if(data.course?.creator_id !== JSON.parse(localStorage.getItem("user"))?.id){
+                navigate("/404");
+                return;
+            }
             setTitle(data.title);
             setStatus(data.status);
             setVideoUrl(data.video_url || "");
-        });
+            }).catch(() => navigate("/404")).finally(() => setLoadingLesson(false));
+        }
+        else{
+            setLoadingLesson(false);
         }
     }, [lessonId]);
+
+    if (loadingLesson) return (
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+            <p className="text-gray-400">Carregando...</p>
+        </div>
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
