@@ -36,7 +36,9 @@ export default function Dashboard(){
             <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
                 <h1 className="text-xl font-bold text-indigo-400">CourseSphere</h1>
                 <div className="flex items-center gap-4">
-                    <span className="text-gray-400 text-sm">Olá, {user?.name}</span>
+                    <Link to="/profile" className="text-gray-400 text-sm hover:text-white transition">
+                        {user?.name}
+                    </Link>
                     <button
                         onClick={handleLogout}
                         className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg transition"

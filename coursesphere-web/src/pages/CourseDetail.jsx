@@ -13,15 +13,17 @@ export default function CourseDetail(){
     const {id} = useParams();
     const {user} = useAuth();
     const navigate = useNavigate();
-
     const [modal, setModal] = useState({open:false, message: "", onConfirm: null});
-
     const [statusFilter, setStatusFilter] = useState("all");
+    const [enrolled, setEnrolled] = useState(false);
+    const [enrolledCount, setEnrolledCount] = useState(0);
 
     useEffect(() => {
         api.get(`/courses/${id}`).then((data) => {
             setCourses(data);
             setLessons(data.lessons || []);
+            setEnrolled(data.enrolled);
+            setEnrolledCount(data.enrolled_count);
         }).catch(() => setCourses(null)).finally(() => setLoading(false));
 
         fetch("https://randomuser.me/api/").then((r) => r.json()).then((data) => setGuest(data.results[0]));
@@ -52,6 +54,25 @@ export default function CourseDetail(){
           }
         });
     };
+
+    const handleEnroll = async () => {
+        const data = await api.post(`/courses/${id}/enroll`, {});
+        if(data.message) {
+            toast.success(data.message);
+            setEnrolled(true);
+            setEnrolledCount(enrolledCount + 1);
+        }
+        else{
+            toast.error(data.error);
+        }
+    };
+
+    const handleUnenroll = async () => {
+        const data = await api.delete(`/courses/${id}/unenroll`);
+        toast.success("Inscrição cancelada!");
+        setEnrolled(false);
+        setEnrolledCount(enrolledCount - 1);
+    }
 
     if (loading) return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center">
@@ -86,6 +107,27 @@ export default function CourseDetail(){
                             )}
                             <p className="text-sm text-gray-500">{course.start_date} → {course.end_date}</p>
                             <p className="text-xs text-gray-600 mt-1">Criado por {course.creator?.name}</p>
+
+                            <div className="flex items-center gap-3 mt-3">
+                                <span className="text-xs text-gray-500">{enrolledCount} inscrito{enrolledCount !== 1? "s" : ""}</span>
+                                {!isCreator &&(
+                                    enrolled ? (
+                                        <button 
+                                            onClick={handleUnenroll}
+                                            className="px-3 py-1 text-xs bg-red-900 hover:bg-red-800 text-white rounded-lg transition"
+                                        >
+                                            Cancelar Inscrição
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleEnroll}
+                                            className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
+                                        >
+                                            Inscrever-se
+                                        </button>
+                                    )
+                                )}
+                            </div>
                         </div>
                         {isCreator && (
                             <div className="flex gap-2">

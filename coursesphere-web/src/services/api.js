@@ -39,6 +39,9 @@ const api = {
                 method: "DELETE",
                 headers: {Authorization: `Bearer ${getToken()}`},
             
+        }).then((r) => {
+            if (r.status === 204) return {};
+            return r.json();
         }),
 };
 
