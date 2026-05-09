@@ -5,11 +5,27 @@ class CoursesController < ApplicationController
 
     def index
         @courses = Course.all
-        render json: @courses
+        @courses = @courses.where("name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
+        page = (params[:page] || 1).to_i
+        per_page = 5
+        total = @courses.count
+        @courses = @courses.offset((page-1) * per_page).limit(per_page)
+        render json: { 
+            courses: @courses.map {|c| c.as_json.merge(lessons_count: c.lessons.count)},
+            total: total,
+            page: page,
+            per_page: per_page,
+            total_pages: (total.to_f/per_page).ceil
+        }
     end
 
     def show
-        render json: @course.as_json(include: :lessons)
+        render json: @course.as_json(
+            include:{
+                lessons: {},
+                creator: {only: [:id, :name]}
+            }
+        )
     end
 
     def create
