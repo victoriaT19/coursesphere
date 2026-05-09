@@ -26,7 +26,8 @@ export default function App(){
       <Route path="/courses/:courseId/lessons/new" element = {<PrivateRoute><LessonForm/></PrivateRoute>}/>
       <Route path="/lessons/:lessonId/edit" element = {<PrivateRoute><LessonForm/></PrivateRoute>}/>
       <Route path="/lessons/:lessonId" element={<PrivateRoute><LessonDetail /></PrivateRoute>} />
-      <Route path="*" element = {<NotFound/>}/>
+      <Route path="/" element={<Navigate to="/login" />}/>
+      <Route path="*" element = {<PrivateRoute><NotFound/></PrivateRoute>}/>
     </Routes>
   );
 }
