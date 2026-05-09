@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import toast from "react-hot-toast";
@@ -22,7 +22,7 @@ export default function CourseDetail(){
         api.get(`/courses/${id}`).then((data) => {
             setCourses(data);
             setLessons(data.lessons || []);
-        }).finally(() => setLoading(false));
+        }).catch(() => setCourses(null)).finally(() => setLoading(false));
 
         fetch("https://randomuser.me/api/").then((r) => r.json()).then((data) => setGuest(data.results[0]));
     }, [id]);
@@ -53,8 +53,12 @@ export default function CourseDetail(){
         });
     };
 
-    if (loading) return <p>Carregando...</p>;
-    if(!course) return <p>Curso não encontrado.</p>
+    if (loading) return (
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+            <p className="text-gray-400">Carregando...</p>
+        </div>
+    );
+    if(!course) return <Navigate to = "/404"/>
 
     const isCreator = user?.id === course.creator_id;
     const filteredLessons = lessons.filter((l) => {
