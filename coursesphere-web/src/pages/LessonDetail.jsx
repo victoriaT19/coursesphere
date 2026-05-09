@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function LessonDetail(){
     const [lesson, setLessons] = useState(null);
@@ -10,14 +12,23 @@ export default function LessonDetail(){
     const {user} = useAuth();
     const navigate = useNavigate();
 
+    const [modal, setModal] = useState({open: false, message: "", onConfirm: null});
+
     useEffect(() => {
         api.get(`/lessons/${lessonId}`).then((data) => setLessons(data)).finally(() => setLoading(false));
     }, [lessonId]);
 
-    const handleDelete = async () =>{
-        if (!confirm("Excluir aula?")) return;
-        await api.delete(`/lessons/${lessonId}`);
-        navigate(`/courses/${lesson.course_id}`);
+    const handleDelete = () =>{
+        setModal({
+            open: true,
+            message: "Tem certeza que deseja excluir esta aula?",
+            onConfirm: async () => {
+                setModal({open:false});
+                await api.delete(`/lessons/${lessonId}`);
+                toast.success("Aula excluída com sucesso!");
+                navigate(`/courses/${lesson.course_id}`);
+            }
+        });    
     };
 
     if(loading) return (
@@ -94,6 +105,13 @@ export default function LessonDetail(){
 
                 </div>
             </main>
+            {modal.open && (
+              <ConfirmModal
+                message={modal.message}
+                onConfirm={modal.onConfirm}
+                onCancel={() => setModal({open:false})}
+              />
+            )}
         </div>
     )
 }
