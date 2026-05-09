@@ -43,6 +43,11 @@ export default function CourseForm(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const today = new Date().toISOString().split("T")[0];
+        if(endDate < today){
+            setError("A data de término não pode ser anterior a hoje");
+            return;
+        }
         setLoading(true);
         setError("");
         const body = { course: {name, description, start_date: startDate, end_date: endDate}};
