@@ -14,17 +14,32 @@ export default function CourseForm(){
     const navigate = useNavigate();
     const isEditing = Boolean(id);
 
+    const [loadingCourse, setLoadingCourse] = useState(true);
+
     useEffect(() => {
         if(isEditing){
             api.get(`/courses/${id}`).then((data) =>
             {
+                if(data.creator_id !== JSON.parse(localStorage.getItem("user"))?.id){
+                    navigate(`/courses/${id}`);
+                    return;
+                }
                 setName (data.name);
                 setDescription(data.description || "");
                 setStartDate(data.start_date);
                 setEndDate(data.end_date);
-            });
+            }).catch(() => navigate("/404")).finally(() => setLoadingCourse(false));
+        }
+        else {
+            setLoadingCourse(false);
         }
     }, [id]);
+
+    if (loadingCourse) return (
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+            <p className="text-gray-400">Carregando...</p>
+        </div>
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
