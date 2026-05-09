@@ -11,14 +11,15 @@ export default function Dashboard(){
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [sort, setSort] = useState("newest");
 
     useEffect(() =>{
         setLoading(true);
-        api.get(`/courses?search=${search}&page=${page}`).then((data) => {
+        api.get(`/courses?search=${search}&page=${page}&sort=${sort}`).then((data) => {
             setCourses(data.courses);
             setTotalPages(data.total_pages);
     }).finally(() => setLoading(false));
-    }, [search, page]);
+    }, [search, page, sort]);
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
@@ -53,6 +54,16 @@ export default function Dashboard(){
                         onChange={handleSearch}
                         className="flex-1 px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-indigo-500"
                     />
+                    <select
+                        value = {sort}
+                        onChange = {(e) => {setSort(e.target.value); setPage(1);}}
+                        className="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-indigo-500"
+                    >
+                        <option value="newest">Mais recentes</option>
+                        <option value="oldest">Mais antigos</option>
+                        <option value="name">Nome A-Z</option>
+                        <option value="name_desc">Nome Z-A</option>
+                    </select>
                     <button
                         onClick={() => navigate("/courses/new")}
                         className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition"
