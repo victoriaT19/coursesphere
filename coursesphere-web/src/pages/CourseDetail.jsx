@@ -66,6 +66,9 @@ export default function CourseDetail(){
         return statusFilter === "all" || l.status === statusFilter;
     });
 
+    const publishedCount = lessons.filter((l) => l.status === "published").length;
+    const draftCount = lessons.filter((l) => l.status === "draft").length;
+
     return (
         <div className="min-h-screen bg-gray-950 text-white">
             <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
@@ -130,15 +133,29 @@ export default function CourseDetail(){
                             </button>
                         )}
                     </div>
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="mb-4 px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-indigo-500"
-                    >
-                        <option value="all">Todas</option>
-                        <option value="draft">Rascunho</option>
-                        <option value="published">Publicado</option>
-                    </select>
+                    <div>
+                        {isCreator && (
+                            <div className="flex gap-3 mb-4">
+                                <span className="text-xs px-2 py-1 rounded-full bg-green-900 text-green-300 font-semibold">
+                                    {publishedCount} publicada{publishedCount !== 1 ? "s":""}
+                                </span>
+                                <span className="text-xs px-2 py-1 rounded-full bg-yellow-900 text-yellow-300 font-semibold">
+                                    {draftCount} rascunho{draftCount !== 1 ? "s" : ""}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                    {isCreator && (
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            className="mb-4 px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-indigo-500"
+                        >
+                            <option value="all">Todas</option>
+                            <option value="draft">Rascunho</option>
+                            <option value="published">Publicado</option>
+                        </select>
+                    )}
                     {filteredLessons.length === 0 ? (
                         <p className="text-gray-400">Nenhuma aula encontrada.</p>
                     ) : (
