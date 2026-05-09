@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link} from "react-router-dom";
 import api from "../services/api";
+import toast from "react-hot-toast";
 
 export default function LessonForm() {
     const [title, setTitle] = useState("");
@@ -28,18 +29,25 @@ export default function LessonForm() {
         setError("");
         const body = { lesson: { title, status, video_url: videoUrl } };
         try {
-        const data = isEditing
-            ? await api.patch(`/lessons/${lessonId}`, body)
-            : await api.post(`/courses/${courseId}/lessons`, body);
-        if (data.id) {
-            navigate(`/courses/${courseId || data.course_id}`);
-        } else {
-            setError(JSON.stringify(data));
-        }
-        } catch {
-        setError("Erro ao salvar aula");
-        } finally {
-        setLoading(false);
+            const data = isEditing
+                ? await api.patch(`/lessons/${lessonId}`, body)
+                : await api.post(`/courses/${courseId}/lessons`, body);
+            if(data.id) {
+                toast.success(isEditing? "Aula atualizada!" : "Aula criada!");
+                navigate(`/courses/${courseId || data.course_id}`);
+            } 
+            else {
+                setError(JSON.stringify(data));
+            }
+        } 
+        
+        catch {
+            toast.error("Erro ao salvar aula");
+            setError("Erro ao salvar aula");
+        } 
+        
+        finally {
+            setLoading(false);
         }
     };
 

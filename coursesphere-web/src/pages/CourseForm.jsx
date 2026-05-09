@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
+import toast from "react-hot-toast";
 
 export default function CourseForm(){
     const [name, setName] = useState("");
@@ -32,7 +33,8 @@ export default function CourseForm(){
         const body = { course: {name, description, start_date: startDate, end_date: endDate}};
         try {
             const data = isEditing ? await api.patch(`/courses/${id}`, body) : await api.post("/courses", body);
-            if (data.id){
+            if(data.id){
+                toast.success(isEditing? "Curso atualizado!" : "Curso criado!");
                 navigate(`/courses/${data.id}`);
             }
             else{
@@ -41,6 +43,7 @@ export default function CourseForm(){
         }
 
         catch {
+            toast.error("Erro ao salvar curso");
             setError("Erro ao salvar curso");
         }
 
