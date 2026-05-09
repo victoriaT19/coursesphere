@@ -11,7 +11,7 @@ class CoursesController < ApplicationController
         total = @courses.count
         @courses = @courses.offset((page-1) * per_page).limit(per_page)
         render json: { 
-            courses: @courses.map {|c| c.as_json.merge(lessons_count: c.lessons.count)},
+            courses: @courses.map {|c| c.as_json.merge(lessons_count: current_user.id == c.creator_id ? c.lessons.count : c.lessons.where(status: "published").count)},
             total: total,
             page: page,
             per_page: per_page,
