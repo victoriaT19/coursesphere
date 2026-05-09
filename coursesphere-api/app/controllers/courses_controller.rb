@@ -4,7 +4,7 @@ class CoursesController < ApplicationController
     before_action :authorize_ownership!, only: [ :update, :destroy ]
 
     def index
-        @courses = Course.all
+        @courses = Course.order(order_clause(params[:sort]))
         @courses = @courses.where("name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
         page = (params[:page] || 1).to_i
         per_page = 5
@@ -67,5 +67,14 @@ class CoursesController < ApplicationController
 
     def course_params
         params.require(:course).permit(:name, :description, :start_date, :end_date)
+    end
+
+    def order_clause(sort)
+      case sort
+        when "name" then "name ASC"
+        when "name_desc" then "name DESC"
+        when "oldest" then "created_at ASC"
+        else "created_at DESC"
+      end
     end
 end
