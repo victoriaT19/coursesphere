@@ -52,6 +52,9 @@ bundle install
 # Configura o banco — edite config/database.yml com seu usuário e senha do PostgreSQL
 rails db:create db:migrate
 
+# Popular banco com dados de teste (opcional)
+rails db:seed
+
 # Inicia o servidor
 rails server
 ```
@@ -77,8 +80,6 @@ O frontend roda em `http://localhost:5173`.
 ---
 
 ## Usuário de teste
-
-## Usuários de teste
 
 | Nome | Email | Senha | Observação |
 |------|-------|-------|------------|
