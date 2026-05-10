@@ -16,6 +16,8 @@ Plataforma web de gestão de cursos online colaborativa, desenvolvida com Ruby o
 - Permissões: apenas o criador pode editar ou excluir seus cursos e aulas
 - Aulas com status `draft` (rascunho) ou `published` (publicado)
 - Rascunhos visíveis apenas para o criador do curso
+- Embed de vídeos do YouTube diretamente na aula
+- Conteúdo textual por aula
 - Inscrição e cancelamento de inscrição em cursos
 - Página de perfil com cursos criados e inscritos
 - Busca e ordenação de cursos no backend
@@ -76,10 +78,12 @@ O frontend roda em `http://localhost:5173`.
 
 ## Usuário de teste
 
-| Campo | Valor |
-|-------|-------|
-| Email | teste@email.com |
-| Senha | 123456 |
+## Usuários de teste
+
+| Nome | Email | Senha | Observação |
+|------|-------|-------|------------|
+| Teste | teste@email.com | 123456 | Possui cursos e aulas criados |
+| t3 | t3@email.com | 234567 | Usuário sem cursos para testar inscrição |
 
 Ou registre um novo usuário pela tela de registro.
 
