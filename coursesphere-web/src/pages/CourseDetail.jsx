@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import toast from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
+import Logo from "../components/Logo";
 
 export default function CourseDetail(){
     const [course, setCourses] = useState(null)
@@ -91,148 +92,201 @@ export default function CourseDetail(){
     const draftCount = lessons.filter((l) => l.status === "draft").length;
 
     return (
-        <div className="min-h-screen bg-gray-950 text-white">
-            <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-                <Link to="/dashboard" className="text-indigo-400 hover:underline text-sm">← Voltar</Link>
-                <h1 className="text-xl font-bold text-indigo-400">CourseSphere</h1>
-                <div className="w-16" />
+        <div style={{ minHeight: "100vh", background: "#0f0f1a", color: "white" }}>
+            <nav style={{
+                background: "#16162a",
+                borderBottom: "0.5px solid #2a2a4a",
+                padding: "0.875rem 1.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <Link to="/dashboard" style={{ color: "#a78bfa", fontSize: "13px", textDecoration: "none" }}>← Voltar</Link>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+                    <Logo size={28} />
+                    <span style={{ fontWeight: "600", fontSize: "15px", color: "white" }}>CourseSphere</span>
+                </div>
+                <div style={{ width: "60px" }} />
             </nav>
-            <main className="max-w-4xl mx-auto px-6 py-8">
-                <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <h2 className="text-2xl font-bold text-white mb-2">{course.name}</h2>
-                            {course.description && (
-                                <p className="text-gray-400 mb-3">{course.description}</p>
-                            )}
-                            <p className="text-sm text-gray-500">{course.start_date} → {course.end_date}</p>
-                            <p className="text-xs text-gray-600 mt-1">Criado por {course.creator?.name}</p>
 
-                            <div className="flex items-center gap-3 mt-3">
-                                <span className="text-xs text-gray-500">{enrolledCount} inscrito{enrolledCount !== 1? "s" : ""}</span>
-                                {!isCreator &&(
+            <main style={{ maxWidth: "860px", margin: "0 auto", padding: "2rem 1.5rem" }}>
+                <div style={{ background: "#16162a", border: "0.5px solid #2a2a4a", borderRadius: "12px", padding: "1.5rem", marginBottom: "1rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div style={{ flex: 1 }}>
+                            <h2 style={{ color: "white", fontSize: "20px", fontWeight: "600", margin: "0 0 0.5rem" }}>{course.name}</h2>
+                            {course.description && (
+                                <p style={{ color: "#6b6b8a", fontSize: "14px", margin: "0 0 0.75rem" }}>{course.description}</p>
+                            )}
+                            <p style={{ color: "#4a4a6a", fontSize: "12px", margin: "0 0 0.25rem" }}>{course.start_date} → {course.end_date}</p>
+                            <p style={{ color: "#4a4a6a", fontSize: "11px", margin: "0 0 0.75rem" }}>Criado por <span style={{ color: "#a78bfa" }}>{course.creator?.name}</span></p>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                                <span style={{ color: "#4a4a6a", fontSize: "12px" }}>{enrolledCount} inscrito{enrolledCount !== 1 ? "s" : ""}</span>
+                                {!isCreator && (
                                     enrolled ? (
-                                        <button 
-                                            onClick={handleUnenroll}
-                                            className="px-3 py-1 text-xs bg-red-900 hover:bg-red-800 text-white rounded-lg transition"
-                                        >
-                                            Cancelar Inscrição
-                                        </button>
+                                        <button onClick={handleUnenroll} style={{
+                                            background: "transparent",
+                                            border: "0.5px solid #7f1d1d",
+                                            borderRadius: "6px",
+                                            padding: "0.3rem 0.75rem",
+                                            color: "#f87171",
+                                            fontSize: "12px",
+                                            cursor: "pointer"
+                                        }}>Cancelar inscrição</button>
                                     ) : (
-                                        <button
-                                            onClick={handleEnroll}
-                                            className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
-                                        >
-                                            Inscrever-se
-                                        </button>
+                                        <button onClick={handleEnroll} style={{
+                                            background: "#7c3aed",
+                                            border: "none",
+                                            borderRadius: "6px",
+                                            padding: "0.3rem 0.75rem",
+                                            color: "white",
+                                            fontSize: "12px",
+                                            cursor: "pointer",
+                                            fontWeight: "500"
+                                        }}>Inscrever-se</button>
                                     )
                                 )}
                             </div>
                         </div>
                         {isCreator && (
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => navigate(`/courses/${id}/edit`)}
-                                    className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg transition"
-                                >
-                                    Editar
-                                </button>
-                                <button
-                                    onClick={handleDeleteCourse}
-                                    className="px-4 py-2 text-sm bg-red-900 hover:bg-red-800 rounded-lg transition"
-                                >
-                                    Excluir
-                                </button>
+                            <div style={{ display: "flex", gap: "0.5rem", marginLeft: "1rem" }}>
+                                <button onClick={() => navigate(`/courses/${id}/edit`)} style={{
+                                    background: "transparent",
+                                    border: "0.5px solid #3b2f6e",
+                                    borderRadius: "8px",
+                                    padding: "0.4rem 0.875rem",
+                                    color: "#a78bfa",
+                                    fontSize: "13px",
+                                    cursor: "pointer"
+                                }}>Editar</button>
+                                <button onClick={handleDeleteCourse} style={{
+                                    background: "transparent",
+                                    border: "0.5px solid #7f1d1d",
+                                    borderRadius: "8px",
+                                    padding: "0.4rem 0.875rem",
+                                    color: "#f87171",
+                                    fontSize: "13px",
+                                    cursor: "pointer"
+                                }}>Excluir</button>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {guest && (
-                    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6 flex items-center gap-4">
-                        <img
-                            src={guest.picture.medium}
-                            alt="instrutor"
-                            className="w-14 h-14 rounded-full border-2 border-indigo-500"
-                        />
+                    <div style={{ background: "#16162a", border: "0.5px solid #2a2a4a", borderRadius: "12px", padding: "1rem 1.5rem", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+                        <img src={guest.picture.medium} alt="instrutor" style={{ width: "48px", height: "48px", borderRadius: "50%", border: "2px solid #7c3aed" }} />
                         <div>
-                            <p className="text-xs text-indigo-400 uppercase font-semibold mb-1">Instrutor Convidado</p>
-                            <p className="text-white font-medium">{guest.name.first} {guest.name.last}</p>
-                            <p className="text-gray-400 text-sm">{guest.location.country}</p>
+                            <p style={{ color: "#22d3ee", fontSize: "10px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 0.25rem" }}>Instrutor Convidado</p>
+                            <p style={{ color: "white", fontSize: "14px", fontWeight: "500", margin: "0 0 0.125rem" }}>{guest.name.first} {guest.name.last}</p>
+                            <p style={{ color: "#6b6b8a", fontSize: "12px", margin: 0 }}>{guest.location.country}</p>
                         </div>
                     </div>
                 )}
 
-                <div className="mb-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-xl font-bold">Aulas</h3>
+                <div style={{ background: "#16162a", border: "0.5px solid #2a2a4a", borderRadius: "12px", padding: "1.5rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                        <h3 style={{ color: "white", fontSize: "16px", fontWeight: "600", margin: 0 }}>Aulas</h3>
                         {isCreator && (
-                            <button
-                                onClick={() => navigate(`/courses/${id}/lessons/new`)}
-                                className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 rounded-lg transition"
-                            >
-                                + Nova Aula
-                            </button>
+                            <button onClick={() => navigate(`/courses/${id}/lessons/new`)} style={{
+                                background: "#7c3aed",
+                                border: "none",
+                                borderRadius: "8px",
+                                padding: "0.4rem 0.875rem",
+                                color: "white",
+                                fontSize: "13px",
+                                fontWeight: "500",
+                                cursor: "pointer"
+                            }}>+ Nova Aula</button>
                         )}
                     </div>
-                    <div>
-                        {isCreator && (
-                            <div className="flex gap-3 mb-4">
-                                <span className="text-xs px-2 py-1 rounded-full bg-green-900 text-green-300 font-semibold">
-                                    {publishedCount} publicada{publishedCount !== 1 ? "s":""}
-                                </span>
-                                <span className="text-xs px-2 py-1 rounded-full bg-yellow-900 text-yellow-300 font-semibold">
-                                    {draftCount} rascunho{draftCount !== 1 ? "s" : ""}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+
+                    {isCreator && (
+                        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                            <span style={{ background: "#052e16", color: "#4ade80", fontSize: "11px", fontWeight: "600", padding: "0.2rem 0.6rem", borderRadius: "99px" }}>
+                                {publishedCount} publicada{publishedCount !== 1 ? "s" : ""}
+                            </span>
+                            <span style={{ background: "#422006", color: "#fbbf24", fontSize: "11px", fontWeight: "600", padding: "0.2rem 0.6rem", borderRadius: "99px" }}>
+                                {draftCount} rascunho{draftCount !== 1 ? "s" : ""}
+                            </span>
+                        </div>
+                    )}
+
                     {isCreator && (
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="mb-4 px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-indigo-500"
+                            style={{
+                                background: "#1e1e38",
+                                border: "0.5px solid #3b2f6e",
+                                borderRadius: "8px",
+                                padding: "0.5rem 0.875rem",
+                                color: "white",
+                                fontSize: "13px",
+                                outline: "none",
+                                marginBottom: "1rem",
+                                cursor: "pointer"
+                            }}
                         >
                             <option value="all">Todas</option>
                             <option value="draft">Rascunho</option>
                             <option value="published">Publicado</option>
                         </select>
                     )}
+
                     {filteredLessons.length === 0 ? (
-                        <p className="text-gray-400">Nenhuma aula encontrada.</p>
+                        <p style={{ color: "#4a4a6a", fontSize: "14px" }}>Nenhuma aula encontrada.</p>
                     ) : (
-                        <div className="grid gap-3">
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                             {filteredLessons.map((lesson) => (
-                                <div
-                                    key={lesson.id}
-                                    className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex justify-between items-center"
-                                >
+                                <div key={lesson.id} style={{
+                                    background: "#0f0f1a",
+                                    border: "0.5px solid #2a2a4a",
+                                    borderRadius: "8px",
+                                    padding: "0.875rem 1rem",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center"
+                                }}>
                                     <div>
-                                        <Link to={`/lessons/${lesson.id}`} className="font-medium text-white hover:text-indigo-400">
+                                        <Link to={`/lessons/${lesson.id}`} style={{ color: "white", textDecoration: "none", fontSize: "14px", fontWeight: "500" }}
+                                            onMouseEnter={e => e.target.style.color = "#22d3ee"}
+                                            onMouseLeave={e => e.target.style.color = "white"}
+                                        >
                                             {lesson.title}
                                         </Link>
-                                        <span className={`text-xs font-semibold px-2 py-1 rounded-full mt-1 inline-block ${
-                                            lesson.status === "published"
-                                                ? "bg-green-900 text-green-300"
-                                                : "bg-yellow-900 text-yellow-300"
-                                        }`}>
+                                        <span style={{
+                                            display: "inline-block",
+                                            marginLeft: "0.5rem",
+                                            fontSize: "10px",
+                                            fontWeight: "600",
+                                            padding: "0.15rem 0.5rem",
+                                            borderRadius: "99px",
+                                            background: lesson.status === "published" ? "#052e16" : "#422006",
+                                            color: lesson.status === "published" ? "#4ade80" : "#fbbf24"
+                                        }}>
                                             {lesson.status === "published" ? "Publicado" : "Rascunho"}
                                         </span>
                                     </div>
                                     {isCreator && (
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => navigate(`/lessons/${lesson.id}/edit`)}
-                                                className="px-3 py-1 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg transition"
-                                            >
-                                                Editar
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteLesson(lesson.id)}
-                                                className="px-3 py-1 text-sm bg-red-900 hover:bg-red-800 rounded-lg transition"
-                                            >
-                                                Excluir
-                                            </button>
+                                        <div style={{ display: "flex", gap: "0.375rem" }}>
+                                            <button onClick={() => navigate(`/lessons/${lesson.id}/edit`)} style={{
+                                                background: "transparent",
+                                                border: "0.5px solid #3b2f6e",
+                                                borderRadius: "6px",
+                                                padding: "0.25rem 0.625rem",
+                                                color: "#a78bfa",
+                                                fontSize: "12px",
+                                                cursor: "pointer"
+                                            }}>Editar</button>
+                                            <button onClick={() => handleDeleteLesson(lesson.id)} style={{
+                                                background: "transparent",
+                                                border: "0.5px solid #7f1d1d",
+                                                borderRadius: "6px",
+                                                padding: "0.25rem 0.625rem",
+                                                color: "#f87171",
+                                                fontSize: "12px",
+                                                cursor: "pointer"
+                                            }}>Excluir</button>
                                         </div>
                                     )}
                                 </div>
@@ -241,12 +295,13 @@ export default function CourseDetail(){
                     )}
                 </div>
             </main>
+
             {modal.open && (
-              <ConfirmModal
-                message={modal.message}
-                onConfirm={modal.onConfirm}
-                onCancel={() => setModal({open:false})}
-              />
+                <ConfirmModal
+                    message={modal.message}
+                    onConfirm={modal.onConfirm}
+                    onCancel={() => setModal({ open: false })}
+                />
             )}
         </div>
     );
