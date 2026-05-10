@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import toast from "react-hot-toast";
+import Logo from "../components/Logo";
 
 export default function CourseForm(){
     const [name, setName] = useState("");
@@ -36,8 +37,8 @@ export default function CourseForm(){
     }, [id]);
 
     if (loadingCourse) return (
-        <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-            <p className="text-gray-400">Carregando...</p>
+        <div style={{ minHeight: "100vh", background: "#0f0f1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <p style={{ color: "#6b6b8a" }}>Carregando...</p>
         </div>
     );
 
@@ -72,60 +73,100 @@ export default function CourseForm(){
         }
     };
 
-    const inputClass = "w-full px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-indigo-500";
+    const inputStyle = {
+        background: "#1e1e38",
+        border: "0.5px solid #3b2f6e",
+        borderRadius: "8px",
+        padding: "0.75rem 1rem",
+        color: "white",
+        fontSize: "14px",
+        outline: "none",
+        width: "100%",
+        boxSizing: "border-box"
+    };
 
     return (
-        <div className="min-h-screen bg-gray-950 text-white">
-            <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-                <Link to="/dashboard" className="text-indigo-400 hover:underline text-sm">← Voltar</Link>
-                <h1 className="text-xl font-bold text-indigo-400">CourseSphere</h1>
-                <div className="w-16" />
+        <div style={{ minHeight: "100vh", background: "#0f0f1a", color: "white" }}>
+            <nav style={{
+                background: "#16162a",
+                borderBottom: "0.5px solid #2a2a4a",
+                padding: "0.875rem 1.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <Link to="/dashboard" style={{ color: "#a78bfa", fontSize: "13px", textDecoration: "none" }}>← Voltar</Link>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+                    <Logo size={28} />
+                    <span style={{ fontWeight: "600", fontSize: "15px", color: "white" }}>CourseSphere</span>
+                </div>
+                <div style={{ width: "60px" }} />
             </nav>
-            <main className="max-w-2xl mx-auto px-6 py-8">
-                <h2 className="text-2xl font-bold mb-6">{isEditing ? "Editar Curso" : "Novo Curso"}</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+            <main style={{ maxWidth: "600px", margin: "0 auto", padding: "2rem 1.5rem" }}>
+                <h2 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "1.5rem", color: "white" }}>
+                    {isEditing ? "Editar Curso" : "Novo Curso"}
+                </h2>
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.875rem" }}>
                     <input
                         type="text"
                         placeholder="Nome do curso"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        className={inputClass}
+                        style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = "#7c3aed"}
+                        onBlur={e => e.target.style.borderColor = "#3b2f6e"}
                     />
                     <textarea
                         placeholder="Descrição (opcional)"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows={4}
-                        className={inputClass}
+                        style={{ ...inputStyle, resize: "vertical" }}
+                        onFocus={e => e.target.style.borderColor = "#7c3aed"}
+                        onBlur={e => e.target.style.borderColor = "#3b2f6e"}
                     />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                         <div>
-                            <label className="text-sm text-gray-400 mb-1 block">Data de início</label>
+                            <label style={{ color: "#6b6b8a", fontSize: "12px", display: "block", marginBottom: "0.375rem" }}>Data de início</label>
                             <input
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
                                 required
-                                className={inputClass}
+                                style={inputStyle}
+                                onFocus={e => e.target.style.borderColor = "#7c3aed"}
+                                onBlur={e => e.target.style.borderColor = "#3b2f6e"}
                             />
                         </div>
                         <div>
-                            <label className="text-sm text-gray-400 mb-1 block">Data de término</label>
+                            <label style={{ color: "#6b6b8a", fontSize: "12px", display: "block", marginBottom: "0.375rem" }}>Data de término</label>
                             <input
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 required
-                                className={inputClass}
+                                style={inputStyle}
+                                onFocus={e => e.target.style.borderColor = "#7c3aed"}
+                                onBlur={e => e.target.style.borderColor = "#3b2f6e"}
                             />
                         </div>
                     </div>
-                    {error && <p className="text-red-400 text-sm">{error}</p>}
+                    {error && <p style={{ color: "#f87171", fontSize: "13px", margin: 0 }}>{error}</p>}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+                        style={{
+                            background: loading ? "#4a3080" : "#7c3aed",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "0.75rem",
+                            color: "white",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: loading ? "not-allowed" : "pointer",
+                            marginTop: "0.25rem"
+                        }}
                     >
                         {loading ? "Salvando..." : "Salvar"}
                     </button>
