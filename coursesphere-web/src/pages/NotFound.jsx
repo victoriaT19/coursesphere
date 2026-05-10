@@ -1,16 +1,33 @@
 import { Link } from "react-router-dom";
+import Logo from "../components/Logo";
 
-export default function NotFound(){
+export default function NotFound() {
     return (
-        <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-white">
-            <h1 className="text-8xl font-bold text-indigo-500 mb-4">404</h1>
-            <p className="text-2xl font-semibold mb-2">Página não encontrada</p>
-            <p className="text-gray-400 mb-8">A página que você está procurando não existe.</p>
-            <Link 
-                to="/dashboard"
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold transition">
-                    Voltar ao início
-                </Link>
+        <div style={{
+            minHeight: "100vh",
+            background: "#0f0f1a",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white"
+        }}>
+            <Logo size={64} />
+            <h1 style={{ fontSize: "96px", fontWeight: "700", color: "#7c3aed", margin: "1rem 0 0.5rem", lineHeight: 1 }}>404</h1>
+            <p style={{ fontSize: "20px", fontWeight: "600", margin: "0 0 0.5rem" }}>Página não encontrada</p>
+            <p style={{ color: "#6b6b8a", fontSize: "14px", margin: "0 0 2rem" }}>A página que você está procurando não existe.</p>
+            <Link to="/dashboard" style={{
+                background: "#7c3aed",
+                border: "none",
+                borderRadius: "8px",
+                padding: "0.75rem 1.5rem",
+                color: "white",
+                fontSize: "14px",
+                fontWeight: "600",
+                textDecoration: "none"
+            }}>
+                Voltar ao início
+            </Link>
         </div>
     );
 }
