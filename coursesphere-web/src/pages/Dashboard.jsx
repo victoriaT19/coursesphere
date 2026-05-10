@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import Logo from "../components/Logo";
 
 export default function Dashboard(){
     const [courses, setCourses] = useState([]);
@@ -31,35 +32,67 @@ export default function Dashboard(){
         navigate("/login");
     };
 
+    const inputStyle = {
+        background: "#1e1e38",
+        border: "0.5px solid #3b2f6e",
+        borderRadius: "8px",
+        padding: "0.75rem 1rem",
+        color: "white",
+        fontSize: "14px",
+        outline: "none",
+        boxSizing: "border-box"
+    };
+
     return (
-        <div className="min-h-screen bg-gray-950 text-white">
-            <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-                <h1 className="text-xl font-bold text-indigo-400">CourseSphere</h1>
-                <div className="flex items-center gap-4">
-                    <Link to="/profile" className="text-gray-400 text-sm hover:text-white transition">
+        <div style={{ minHeight: "100vh", background: "#0f0f1a", color: "white" }}>
+            <nav style={{
+                background: "#16162a",
+                borderBottom: "0.5px solid #2a2a4a",
+                padding: "0.875rem 1.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+                    <Logo size={32} />
+                    <span style={{ fontWeight: "600", fontSize: "16px", color: "white" }}>CourseSphere</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    <Link to="/profile" style={{ color: "#a78bfa", fontSize: "13px", textDecoration: "none" }}>
                         {user?.name}
                     </Link>
                     <button
                         onClick={handleLogout}
-                        className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg transition"
+                        style={{
+                            background: "transparent",
+                            border: "0.5px solid #3b2f6e",
+                            borderRadius: "8px",
+                            padding: "0.4rem 0.875rem",
+                            color: "#6b6b8a",
+                            fontSize: "13px",
+                            cursor: "pointer"
+                        }}
                     >
                         Sair
                     </button>
                 </div>
             </nav>
-            <main className="max-w-4xl mx-auto px-6 py-8">
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+
+            <main style={{ maxWidth: "860px", margin: "0 auto", padding: "2rem 1.5rem" }}>
+                <div style={{ display: "flex", gap: "0.75rem", marginBottom: "2rem", flexWrap: "wrap" }}>
                     <input
                         type="text"
                         placeholder="Buscar curso..."
                         value={search}
                         onChange={handleSearch}
-                        className="flex-1 px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-indigo-500"
+                        style={{ ...inputStyle, flex: 1, minWidth: "200px" }}
+                        onFocus={e => e.target.style.borderColor = "#7c3aed"}
+                        onBlur={e => e.target.style.borderColor = "#3b2f6e"}
                     />
                     <select
-                        value = {sort}
-                        onChange = {(e) => {setSort(e.target.value); setPage(1);}}
-                        className="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-indigo-500"
+                        value={sort}
+                        onChange={(e) => { setSort(e.target.value); setPage(1); }}
+                        style={{ ...inputStyle, width: "160px" }}
                     >
                         <option value="newest">Mais recentes</option>
                         <option value="oldest">Mais antigos</option>
@@ -68,55 +101,105 @@ export default function Dashboard(){
                     </select>
                     <button
                         onClick={() => navigate("/courses/new")}
-                        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition"
+                        style={{
+                            background: "#7c3aed",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "0.75rem 1.25rem",
+                            color: "white",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            whiteSpace: "nowrap"
+                        }}
                     >
                         + Novo Curso
                     </button>
                 </div>
+
                 {loading ? (
-                    <div className="grid gap-4">
-                        {[1,2,3].map((i) => (
-                            <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-6 animate-pulse">
-                                <div className="h-5 bg-gray-700 rounded w-1/3 mb-3"></div>
-                                <div className="h-3 bg-gray-800 rounded w-1/4 mb-2"></div>
-                                <div className="h-3 bg-gray-800 rounded w-1/6"></div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} style={{
+                                background: "#16162a",
+                                border: "0.5px solid #2a2a4a",
+                                borderRadius: "12px",
+                                padding: "1.5rem",
+                                animation: "pulse 1.5s infinite"
+                            }}>
+                                <div style={{ height: "16px", background: "#2a2a4a", borderRadius: "4px", width: "40%", marginBottom: "12px" }} />
+                                <div style={{ height: "12px", background: "#1e1e38", borderRadius: "4px", width: "25%" }} />
                             </div>
                         ))}
                     </div>
                 ) : courses.length === 0 ? (
-                    <p className="text-gray-400">Nenhum curso encontrado.</p>
+                    <p style={{ color: "#6b6b8a", textAlign: "center", marginTop: "3rem" }}>Nenhum curso encontrado.</p>
                 ) : (
-                    <div className="grid gap-4">
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                         {courses.map((course) => (
                             <Link
                                 to={`/courses/${course.id}`}
                                 key={course.id}
-                                className="block bg-gray-900 border border-gray-800 hover:border-indigo-500 rounded-xl p-6 transition"
+                                style={{
+                                    display: "block",
+                                    background: "#16162a",
+                                    border: "0.5px solid #2a2a4a",
+                                    borderRadius: "12px",
+                                    padding: "1.25rem 1.5rem",
+                                    textDecoration: "none",
+                                    transition: "border-color 0.2s"
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.borderColor = "#7c3aed"}
+                                onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a4a"}
                             >
-                                <h3 className="text-lg font-semibold text-white mb-1">{course.name}</h3>
-                                <p className="text-gray-400 text-sm">{course.start_date} → {course.end_date}</p>
-                                <p className="text-gray-500 text-xs mt-1">{course.lessons_count} {course.lessons_count === 1 ? "aula" : "aulas"}</p>
+                                <h3 style={{ color: "white", fontSize: "15px", fontWeight: "600", margin: "0 0 0.375rem" }}>
+                                    {course.name}
+                                </h3>
+                                <p style={{ color: "#6b6b8a", fontSize: "12px", margin: "0 0 0.375rem" }}>
+                                    {course.start_date} → {course.end_date}
+                                </p>
+                                <span style={{
+                                    color: "#22d3ee",
+                                    fontSize: "11px",
+                                    fontWeight: "500"
+                                }}>
+                                    {course.lessons_count} {course.lessons_count === 1 ? "aula" : "aulas"}
+                                </span>
                             </Link>
                         ))}
                     </div>
                 )}
 
                 {totalPages > 1 && (
-                    <div className="flex justify-center gap-2 mt-8">
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", marginTop: "2rem" }}>
                         <button
                             onClick={() => setPage(page - 1)}
-                            disabled = {page === 1}
-                            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition disabled:opacity-50"
+                            disabled={page === 1}
+                            style={{
+                                background: "transparent",
+                                border: "0.5px solid #3b2f6e",
+                                borderRadius: "8px",
+                                padding: "0.5rem 1rem",
+                                color: page === 1 ? "#4a4a6a" : "#a78bfa",
+                                fontSize: "13px",
+                                cursor: page === 1 ? "not-allowed" : "pointer"
+                            }}
                         >
                             ← Anterior
                         </button>
-                        <span className="px-4 py-2 text-gray-400 text-sm">
-                            {page} / {totalPages}
-                        </span>
+                        <span style={{ color: "#6b6b8a", fontSize: "13px" }}>{page} / {totalPages}</span>
                         <button
                             onClick={() => setPage(page + 1)}
-                            disabled = {page === totalPages}
-                            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition disabled:opacity-50"
+                            disabled={page === totalPages}
+                            style={{
+                                background: "transparent",
+                                border: "0.5px solid #3b2f6e",
+                                borderRadius: "8px",
+                                padding: "0.5rem 1rem",
+                                color: page === totalPages ? "#4a4a6a" : "#a78bfa",
+                                fontSize: "13px",
+                                cursor: page === totalPages ? "not-allowed" : "pointer"
+                            }}
                         >
                             Próxima →
                         </button>
