@@ -49,7 +49,7 @@ class LessonsController < ApplicationController
   end
 
   def lesson_params
-    params.require(:lesson).permit(:title, :status, :video_url)
+    params.require(:lesson).permit(:title, :status, :video_url, :content)
   end
 
   def authorize_ownership!
