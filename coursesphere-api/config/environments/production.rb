@@ -88,11 +88,7 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   # 
   #
-  # Força o Solid Cable, Cache e Queue a usarem o banco principal ou ficarem quietos
   config.solid_cache.connects_to = { database: { writing: :primary, reading: :primary } }
   config.solid_queue.connects_to = { database: { writing: :primary, reading: :primary } }
-  
-  # Como você provavelmente não vai usar o Solid Cable agora, podemos apenas desativar a configuração de banco dele
-  # Mas para garantir que o boot passe, aponte para o primary também:
   config.solid_cable.connects_to = { database: { writing: :primary, reading: :primary } }
 end
