@@ -44,10 +44,10 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  config.cache_store = :memory_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
+  config.active_job.queue_adapter = :inline
   #config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -88,7 +88,7 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   # 
   #
-  config.solid_cache.connects_to = { database: { writing: :primary, reading: :primary } }
-  config.solid_queue.connects_to = { database: { writing: :primary, reading: :primary } }
-  config.solid_cable.connects_to = { database: { writing: :primary, reading: :primary } }
+  #config.solid_cache.connects_to = { database: { writing: :primary, reading: :primary } }
+  #config.solid_queue.connects_to = { database: { writing: :primary, reading: :primary } }
+  #config.solid_cable.connects_to = { database: { writing: :primary, reading: :primary } }
 end
