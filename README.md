@@ -41,7 +41,14 @@ Plataforma web de gestão de cursos online colaborativa, desenvolvida com Ruby o
 
 ---
 
-## Rodando o backend
+## Deploy
+
+- **Frontend:** https://course-sphere-phi.vercel.app
+- **Backend:** https://coursesphere-api-97fx.onrender.com
+
+---
+
+## Rodando o backend (localmente)
 
 ```bash
 cd coursesphere-api
@@ -63,7 +70,7 @@ O backend roda em `http://localhost:3000`.
 
 ---
 
-## Rodando o frontend
+## Rodando o frontend (localmente)
 
 ```bash
 cd coursesphere-web
