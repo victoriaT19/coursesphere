@@ -61,7 +61,7 @@ class CoursesController < ApplicationController
     end
 
     def authorize_ownership!
-        unless current_user == @course.creator || current_user.admin?
+        unless current_user == @course.creator
             render json: { error: "Not Authorized: Voce não é o criador desse curso" }, status: :forbidden
         end
     end
